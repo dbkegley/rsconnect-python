@@ -31,10 +31,6 @@ from rsconnect.actions import (
     check_server_capabilities,
     create_api_deployment_bundle,
     create_notebook_deployment_bundle,
-    deploy_dash_app,
-    deploy_python_api,
-    deploy_streamlit_app,
-    deploy_bokeh_app,
     gather_basic_deployment_info_for_api,
     get_python_env_info,
     inspect_environment,
@@ -57,9 +53,6 @@ class TestActions(TestCase):
     def test_which_python(self):
         with self.assertRaises(RSConnectException):
             which_python("fake.file")
-
-        with self.assertRaises(RSConnectException):
-            which_python(__file__)
 
         self.assertEqual(which_python(sys.executable), sys.executable)
         self.assertEqual(which_python(None), sys.executable)
@@ -218,90 +211,6 @@ class TestActions(TestCase):
             validate_extra_files(directory, [join(directory, "index.htm")]),
             ["index.htm"],
         )
-
-    def test_deploy_python_api_validates(self):
-        directory = get_api_path("flask")
-        server = RSConnectServer("https://www.bogus.com", "bogus")
-        with self.assertRaises(RSConnectException):
-            deploy_python_api(server, directory, [], [], "bogus")
-
-    def test_deploy_dash_app_signature(self):
-        self.assertEqual(
-            str(signature(deploy_dash_app)),
-            "({})".format(
-                ", ".join(
-                    [
-                        "connect_server",
-                        "directory",
-                        "extra_files",
-                        "excludes",
-                        "entry_point",
-                        "new=False",
-                        "app_id=None",
-                        "title=None",
-                        "python=None",
-                        "conda_mode=False",
-                        "force_generate=False",
-                        "log_callback=None",
-                    ]
-                )
-            ),
-        )
-
-    def test_deploy_dash_app_docs(self):
-        self.assertTrue("Dash app" in deploy_dash_app.__doc__)
-
-    def test_deploy_streamlit_app_signature(self):
-        self.assertEqual(
-            str(signature(deploy_streamlit_app)),
-            "({})".format(
-                ", ".join(
-                    [
-                        "connect_server",
-                        "directory",
-                        "extra_files",
-                        "excludes",
-                        "entry_point",
-                        "new=False",
-                        "app_id=None",
-                        "title=None",
-                        "python=None",
-                        "conda_mode=False",
-                        "force_generate=False",
-                        "log_callback=None",
-                    ]
-                )
-            ),
-        )
-
-    def test_deploy_streamlit_app_docs(self):
-        self.assertTrue("Streamlit app" in deploy_streamlit_app.__doc__)
-
-    def test_deploy_bokeh_app_signature(self):
-        self.assertEqual(
-            str(signature(deploy_bokeh_app)),
-            "({})".format(
-                ", ".join(
-                    [
-                        "connect_server",
-                        "directory",
-                        "extra_files",
-                        "excludes",
-                        "entry_point",
-                        "new=False",
-                        "app_id=None",
-                        "title=None",
-                        "python=None",
-                        "conda_mode=False",
-                        "force_generate=False",
-                        "log_callback=None",
-                    ]
-                )
-            ),
-        )
-
-    def test_deploy_bokeh_app_docs(self):
-        self.assertTrue("Bokeh app" in deploy_bokeh_app.__doc__)
 
     def test_gather_basic_deployment_info_for_api_validates(self):
         directory = get_api_path("flask")

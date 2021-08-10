@@ -8,7 +8,6 @@ from os.path import dirname, join
 
 from rsconnect.environment import detect_environment
 from rsconnect.bundle import (
-    list_files,
     make_manifest_bundle,
     make_notebook_html_bundle,
     make_notebook_source_bundle,
@@ -49,7 +48,14 @@ class TestBundle(TestCase):
         ) as tar:
 
             names = sorted(tar.getnames())
-            self.assertEqual(names, ["dummy.ipynb", "manifest.json", "requirements.txt",])
+            self.assertEqual(
+                names,
+                [
+                    "dummy.ipynb",
+                    "manifest.json",
+                    "requirements.txt",
+                ],
+            )
 
             reqs = tar.extractfile("requirements.txt").read()
             self.assertEqual(reqs, b"numpy\npandas\nmatplotlib\n")
@@ -70,13 +76,21 @@ class TestBundle(TestCase):
                 manifest,
                 {
                     u"version": 1,
-                    u"metadata": {u"appmode": u"jupyter-static", u"entrypoint": u"dummy.ipynb",},
+                    u"metadata": {
+                        u"appmode": u"jupyter-static",
+                        u"entrypoint": u"dummy.ipynb",
+                    },
                     u"python": {
                         u"version": self.python_version(),
-                        u"package_manager": {u"name": u"pip", u"package_file": u"requirements.txt",},
+                        u"package_manager": {
+                            u"name": u"pip",
+                            u"package_file": u"requirements.txt",
+                        },
                     },
                     u"files": {
-                        u"dummy.ipynb": {u"checksum": ipynb_hash,},
+                        u"dummy.ipynb": {
+                            u"checksum": ipynb_hash,
+                        },
                         u"requirements.txt": {u"checksum": u"5f2a5e862fe7afe3def4a57bb5cfb214"},
                     },
                 },
@@ -98,7 +112,15 @@ class TestBundle(TestCase):
         ) as tar:
 
             names = sorted(tar.getnames())
-            self.assertEqual(names, ["data.csv", "dummy.ipynb", "manifest.json", "requirements.txt",])
+            self.assertEqual(
+                names,
+                [
+                    "data.csv",
+                    "dummy.ipynb",
+                    "manifest.json",
+                    "requirements.txt",
+                ],
+            )
 
             reqs = tar.extractfile("requirements.txt").read()
 
@@ -124,52 +146,25 @@ class TestBundle(TestCase):
                 manifest,
                 {
                     u"version": 1,
-                    u"metadata": {u"appmode": u"jupyter-static", u"entrypoint": u"dummy.ipynb",},
+                    u"metadata": {
+                        u"appmode": u"jupyter-static",
+                        u"entrypoint": u"dummy.ipynb",
+                    },
                     u"python": {
                         u"version": self.python_version(),
-                        u"package_manager": {u"name": u"pip", u"package_file": u"requirements.txt",},
+                        u"package_manager": {
+                            u"name": u"pip",
+                            u"package_file": u"requirements.txt",
+                        },
                     },
                     u"files": {
-                        u"dummy.ipynb": {u"checksum": ipynb_hash,},
+                        u"dummy.ipynb": {
+                            u"checksum": ipynb_hash,
+                        },
                         u"data.csv": {u"checksum": u"f2bd77cc2752b3efbb732b761d2aa3c3"},
                     },
                 },
             )
-
-    def test_list_files(self):
-        # noinspection SpellCheckingInspection
-        paths = [
-            "notebook.ipynb",
-            "somedata.csv",
-            "subdir/subfile",
-            "subdir2/subfile2",
-            ".ipynb_checkpoints/notebook.ipynb",
-            ".git/config",
-        ]
-
-        def walk(base_dir):
-            dir_names = []
-            file_names = []
-
-            for path in paths:
-                if "/" in path:
-                    dir_name, file_name = path.split("/", 1)
-                    dir_names.append(dir_name)
-                else:
-                    file_names.append(path)
-
-            yield base_dir, dir_names, file_names
-
-            for subdir in dir_names:
-                for path in paths:
-                    if path.startswith(subdir + "/"):
-                        yield base_dir + "/" + subdir, [], [path.split("/", 1)[1]]
-
-        files = list_files("/", True, walk=walk)
-        self.assertEqual(files, paths[:4])
-
-        files = list_files("/", False, walk=walk)
-        self.assertEqual(files, paths[:2])
 
     def test_html_bundle1(self):
         self.do_test_html_bundle(get_dir("pip1"))
@@ -187,13 +182,26 @@ class TestBundle(TestCase):
 
         try:
             names = sorted(tar.getnames())
-            self.assertEqual(names, ["dummy.html", "manifest.json",])
+            self.assertEqual(
+                names,
+                [
+                    "dummy.html",
+                    "manifest.json",
+                ],
+            )
 
             manifest = json.loads(tar.extractfile("manifest.json").read().decode("utf-8"))
 
             # noinspection SpellCheckingInspection
             self.assertEqual(
-                manifest, {u"version": 1, u"metadata": {u"appmode": u"static", u"primary_html": u"dummy.html",},},
+                manifest,
+                {
+                    u"version": 1,
+                    u"metadata": {
+                        u"appmode": u"static",
+                        u"primary_html": u"dummy.html",
+                    },
+                },
             )
         finally:
             tar.close()
