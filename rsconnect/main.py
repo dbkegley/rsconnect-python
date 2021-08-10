@@ -16,6 +16,7 @@ from rsconnect.actions import (
     deploy_bundle,
     describe_manifest,
     gather_basic_deployment_info_for_api,
+    gather_basic_deployment_info_for_fastapi,
     gather_basic_deployment_info_for_dash,
     gather_basic_deployment_info_for_streamlit,
     gather_basic_deployment_info_for_bokeh,
@@ -941,6 +942,7 @@ def generate_deploy_python(app_mode, alias, min_version):
             extra_files,
             {
                 AppModes.PYTHON_API: gather_basic_deployment_info_for_api,
+                AppModes.PYTHON_FASTAPI: gather_basic_deployment_info_for_fastapi,
                 AppModes.DASH_APP: gather_basic_deployment_info_for_dash,
                 AppModes.STREAMLIT_APP: gather_basic_deployment_info_for_streamlit,
                 AppModes.BOKEH_APP: gather_basic_deployment_info_for_bokeh,
@@ -951,6 +953,8 @@ def generate_deploy_python(app_mode, alias, min_version):
 
 
 deploy_api = generate_deploy_python(app_mode=AppModes.PYTHON_API, alias="api", min_version="1.8.2")
+# TODO: set fastapi min_version correctly
+deploy_fastapi = generate_deploy_python(app_mode=AppModes.PYTHON_FASTAPI, alias="fastapi", min_version="1.8.8")
 deploy_dash_app = generate_deploy_python(app_mode=AppModes.DASH_APP, alias="dash", min_version="1.8.2")
 deploy_streamlit_app = generate_deploy_python(app_mode=AppModes.STREAMLIT_APP, alias="streamlit", min_version="1.8.4")
 deploy_bokeh_app = generate_deploy_python(app_mode=AppModes.BOKEH_APP, alias="bokeh", min_version="1.8.4")
@@ -1240,6 +1244,7 @@ def generate_write_manifest_python(app_mode, alias):
 
 
 write_manifest_api = generate_write_manifest_python(AppModes.PYTHON_API, alias="api")
+write_manifest_fastapi = generate_write_manifest_python(AppModes.PYTHON_FASTAPI, alias="fastapi")
 write_manifest_dash = generate_write_manifest_python(AppModes.DASH_APP, alias="dash")
 write_manifest_streamlit = generate_write_manifest_python(AppModes.STREAMLIT_APP, alias="streamlit")
 write_manifest_bokeh = generate_write_manifest_python(AppModes.BOKEH_APP, alias="bokeh")
