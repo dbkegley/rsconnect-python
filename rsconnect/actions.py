@@ -578,7 +578,14 @@ def _generate_gather_basic_deployment_info_for_python(app_mode):
 
     def gatherer(connect_server, app_store, directory, entry_point, new, app_id, title):
         return _gather_basic_deployment_info_for_framework(
-            connect_server, app_store, directory, entry_point, new, app_id, app_mode, title,
+            connect_server,
+            app_store,
+            directory,
+            entry_point,
+            new,
+            app_id,
+            app_mode,
+            title,
         )
 
     return gatherer
@@ -677,7 +684,12 @@ def get_python_env_info(file_name, python, conda_mode=False, force_generate=Fals
 
 
 def create_notebook_deployment_bundle(
-    file_name, extra_files, app_mode, python, environment, extra_files_need_validating=True,
+    file_name,
+    extra_files,
+    app_mode,
+    python,
+    environment,
+    extra_files_need_validating=True,
     hide_all_input=None,
     hide_tagged_input=None,
 ):
@@ -691,7 +703,7 @@ def create_notebook_deployment_bundle(
     :param environment: environmental information.
     :param extra_files_need_validating: a flag indicating whether the list of extra
     :param hide_all_input: if True, will hide all input cells when rendering output
-    :param hide_tagged_input: If True, will hide input code cells with the 'hide_input' tag when rendering output    
+    :param hide_tagged_input: If True, will hide input code cells with the 'hide_input' tag when rendering output
     files should be validated or not.  Part of validating includes qualifying each
     with the parent directory of the notebook file.  If you provide False here, make
     sure the names are properly qualified first.
@@ -714,7 +726,13 @@ def create_notebook_deployment_bundle(
 
 
 def create_api_deployment_bundle(
-    directory, extra_files, excludes, entry_point, app_mode, environment, extra_files_need_validating=True,
+    directory,
+    extra_files,
+    excludes,
+    entry_point,
+    app_mode,
+    environment,
+    extra_files_need_validating=True,
 ):
     """
     Create an in-memory bundle, ready to deploy.
@@ -798,17 +816,21 @@ def create_notebook_manifest_and_environment_file(
     :param force: if True, forces the environment file to be written. even if it
     already exists.
     :param hide_all_input: if True, will hide all input cells when rendering output
-    :param hide_tagged_input: If True, will hide input code cells with the 'hide_input' tag when rendering output    
+    :param hide_tagged_input: If True, will hide input code cells with the 'hide_input' tag when rendering output
     :return:
     """
     if (
-        not write_notebook_manifest_json(entry_point_file, environment, app_mode, extra_files, hide_all_input, hide_tagged_input)
+        not write_notebook_manifest_json(
+            entry_point_file, environment, app_mode, extra_files, hide_all_input, hide_tagged_input
+        )
         or force
     ):
         write_environment_file(environment, dirname(entry_point_file))
 
 
-def write_notebook_manifest_json(entry_point_file, environment, app_mode, extra_files, hide_all_input, hide_tagged_input):
+def write_notebook_manifest_json(
+    entry_point_file, environment, app_mode, extra_files, hide_all_input, hide_tagged_input
+):
     """
     Creates and writes a manifest.json file for the given entry point file.  If
     the application mode is not provided, an attempt will be made to resolve one
@@ -822,7 +844,7 @@ def write_notebook_manifest_json(entry_point_file, environment, app_mode, extra_
     portion of the entry point file name will be used to derive one.
     :param extra_files: any extra files that should be included in the manifest.
     :param hide_all_input: if True, will hide all input cells when rendering output
-    :param hide_tagged_input: If True, will hide input code cells with the 'hide_input' tag when rendering output    
+    :param hide_tagged_input: If True, will hide input code cells with the 'hide_input' tag when rendering output
     :return: whether or not the environment file (requirements.txt, environment.yml,
     etc.) that goes along with the manifest exists.
     """
@@ -851,7 +873,13 @@ def write_notebook_manifest_json(entry_point_file, environment, app_mode, extra_
 
 
 def create_api_manifest_and_environment_file(
-    directory, entry_point, environment, app_mode=AppModes.PYTHON_API, extra_files=None, excludes=None, force=True,
+    directory,
+    entry_point,
+    environment,
+    app_mode=AppModes.PYTHON_API,
+    extra_files=None,
+    excludes=None,
+    force=True,
 ):
     """
     Creates and writes a manifest.json file for the given Python API entry point.  If
@@ -874,7 +902,12 @@ def create_api_manifest_and_environment_file(
 
 
 def write_api_manifest_json(
-    directory, entry_point, environment, app_mode=AppModes.PYTHON_API, extra_files=None, excludes=None,
+    directory,
+    entry_point,
+    environment,
+    app_mode=AppModes.PYTHON_API,
+    extra_files=None,
+    excludes=None,
 ):
     """
     Creates and writes a manifest.json file for the given entry point file.  If
